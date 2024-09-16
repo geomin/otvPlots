@@ -56,7 +56,7 @@
 #' governing permissions and limitations under the License.
 #' @export
 PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp, 
-                       weightNm = NULL, labelFl = NULL, genCSV = TRUE, 
+                       weightNm = NULL, savePdf=TRUE, labelFl = NULL, genCSV = TRUE, 
                        highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
                        fuzzyLabelFn = NULL, kCategories = 9) {
   
@@ -71,9 +71,11 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp,
            highlightNms = highlightNms, skewOpt = skewOpt,
            fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories)
   
-  grDevices::pdf(file = paste(outFl, '.pdf', sep = ''),  width = 11, height = 8,
+  if(savePdf){
+  	grDevices::pdf(file = paste(outFl, '.pdf', sep = ''),  width = 11, height = 8,
                  pointsize = 12, onefile = TRUE)
-  
+  }
+
   for (x in plotList)  {
     grid::grid.newpage()
     grid::grid.draw(x$p)
@@ -85,7 +87,10 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp,
         numSummary = rbind(numSummary, x$varSummary) 
     }  
   }
-  dev.off()
+
+  if(savePdf){
+    dev.off()
+  }
   
   ## Generate CSV files
   if(genCSV == TRUE){
@@ -223,14 +228,16 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
                      c("Date", "IDate")))) {
     stop("Cannot plot dates")
   }
-  
+
   ## Label myVar type to be "nmrcl" or "ctgrl" if not labeled yet
-  if (!(inherits(myVar, "ctgrl") | inherits(myVar, "nmrcl"))) {
-    if (dataFl[, class(get(myVar))] %in% c("character", "factor") ||
-        dataFl[, length(unique(stats::na.omit(get(myVar))))] == 2) {
-      setattr(dataFl[, get(myVar)], "class", "ctgrl")
+  if (!("ctgrl" %in% class(myVar) || "nmrcl" %in% class(myVar))) {
+    var_data <- dataFl[[myVar]]
+  
+    if (is.character(var_data) || is.factor(var_data) ||
+        length(unique(stats::na.omit(var_data))) == 2) {
+      class(dataFl[[myVar]]) <- c("ctgrl", class(dataFl[[myVar]]))
     } else {
-      setattr(dataFl[, get(myVar)], "class", "nmrcl")
+      class(dataFl[[myVar]]) <- c("nmrcl", class(dataFl[[myVar]]))
     }
   }
   

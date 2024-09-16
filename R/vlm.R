@@ -154,7 +154,7 @@
 #'}
 
 vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", 
-                genCSV = TRUE, dataNeedPrep = FALSE, dateGp = NULL, 
+                genCSV = TRUE, savePdf = TRUE, dataNeedPrep = FALSE, dateGp = NULL, 
                 dateGpBp = NULL, weightNm = NULL, varNms = NULL, 
                 sortVars = NULL, sortFn = NULL, selectCols = NULL, 
                 dropCols = NULL, dateFt = "%d%h%Y", buildTm = NULL, 
@@ -216,7 +216,7 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots",
                dataFl = dataFl[, c(varNms, dateNm, dateGp, dateGpBp, weightNm),
                                with = FALSE],
                sortVars = sortVars[sortVars %in% varNms], dateNm = dateNm,
-               dateGp = dateGp, dateGpBp = dateGpBp, weightNm = weightNm,
+               dateGp = dateGp, dateGpBp = dateGpBp, savePdf = savePdf, weightNm = weightNm,
                labelFl = labelFl, genCSV = genCSV, highlightNms = highlightNms,
                skewOpt = skewOpt, kSample = kSample,
                fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories)
@@ -225,6 +225,7 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots",
                dateNm = dateNm, dateGp = dateGp, dateGpBp = dateGpBp,
                weightNm = weightNm, labelFl = labelFl, genCSV = genCSV,
                highlightNms = highlightNms, skewOpt = skewOpt,
+	       savePdf = savePdf,
                kSample = kSample, fuzzyLabelFn = fuzzyLabelFn,
                kCategories = kCategories)
   }
